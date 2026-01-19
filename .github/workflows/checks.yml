@@ -21,13 +21,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Download gomdlint
-        run: |
-          curl -fsSL -o /tmp/gomdlint.tar.gz \
-            "https://github.com/jamesainslie/gomdlint/releases/download/v0.1.2/mdlint_0.1.2_Linux_x86_64.tar.gz"
-          tar xzf /tmp/gomdlint.tar.gz -C /tmp
-          chmod +x /tmp/gomdlint
-          sudo mv /tmp/gomdlint /usr/local/bin/
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.23'
+          cache: false
+
+      - name: Install gomdlint
+        run: go install github.com/jamesainslie/gomdlint@v0.1.2
 
       - name: Lint markdown
         run: gomdlint lint .
