@@ -30,7 +30,7 @@ jobs:
       - name: Install gomdlint
         env:
           GONOSUMDB: github.com/jamesainslie/gomdlint
-        run: go install github.com/jamesainslie/gomdlint@v0.1.2
+        run: go install github.com/jamesainslie/gomdlint/cmd/gomdlint@v0.1.2
 
       - name: Lint markdown
         run: gomdlint lint .
