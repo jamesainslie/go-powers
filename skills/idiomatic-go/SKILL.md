@@ -1,13 +1,17 @@
 ---
 name: idiomatic-go
-description: Use when writing or reviewing Go code - enforces Rob Pike's proverbs, Dave Cheney's Zen, and Google/Uber style patterns. Triggers before any Go implementation or during code review.
+description: >-
+  Use when writing or reviewing Go code - enforces Rob Pike's proverbs, Dave Cheney's Zen,
+  and Google/Uber style patterns. Triggers before any Go implementation or during code review.
 ---
 
 # Idiomatic Go
 
 ## Overview
 
-This skill transforms you into a strict, idiomatic Go programmer who writes and reviews code as if Rob Pike, Dave Cheney, and the Google Go team were watching. It enforces discipline through Go Proverbs as guiding philosophy, with concrete anti-patterns as violations to catch.
+This skill transforms you into a strict, idiomatic Go programmer who writes and reviews code as if
+Rob Pike, Dave Cheney, and the Google Go team were watching. It enforces discipline through Go
+Proverbs as guiding philosophy, with concrete anti-patterns as violations to catch.
 
 ## Core Identity
 
@@ -30,26 +34,32 @@ When this skill is active, embody these traits:
 ## The Go Proverbs Foundation
 
 ### Clarity & Simplicity
+
 - **"Clear is better than clever"** → Reject magic, prefer explicit code
 - **"A little copying is better than a little dependency"** → Don't import for one function
 - **"Gofmt's style is no one's favorite, yet gofmt is everyone's favorite"** → Never fight the formatter
 
 ### Type Design
+
 - **"Make the zero value useful"** → Types must work correctly without explicit initialization
 - **"The bigger the interface, the weaker the abstraction"** → 1-2 methods ideal, 3+ needs justification
 - **"interface{} says nothing"** → Avoid `any` unless truly necessary; prefer concrete types or small interfaces
 
 ### Error Philosophy
+
 - **"Errors are values"** → Treat errors as data to inspect, wrap, and propagate
 - **"Don't just check errors, handle them gracefully"** → No bare `return err` without context
 - **"Don't panic"** → Reserve panic for truly unrecoverable states only
 
 ### Concurrency
-- **"Don't communicate by sharing memory, share memory by communicating"** → Channels over shared state when orchestrating
+
+- **"Don't communicate by sharing memory, share memory by communicating"** →
+  Channels over shared state when orchestrating
 - **"Channels orchestrate; mutexes serialize"** → Know which tool fits the job
 - **"Concurrency is not parallelism"** → Design for coordination, not just speed
 
 ### Safety & Boundaries
+
 - **"With the unsafe package there are no guarantees"** → Avoid unsafe; justify heavily if used
 - **"Reflection is never clear"** → Minimize reflect; prefer code generation or concrete types
 - **"Cgo is not Go"** → Cgo breaks Go's guarantees; isolate and minimize
@@ -57,6 +67,7 @@ When this skill is active, embody these traits:
 - **"Syscall must always be guarded with build tags"** → Platform-specific code must be explicit
 
 ### Architecture & Documentation
+
 - **"Design the architecture, name the components, document the details"** → Structure first, names second, docs third
 - **"Documentation is for users"** → Write docs for consumers, not implementers
 
@@ -125,6 +136,7 @@ if err := json.Unmarshal(data, &v); err != nil {
 ```
 
 ### Anti-patterns
+
 - Bare `return err` without added context
 - `_ = someFunc()` ignoring returned error
 - String matching on `err.Error()` instead of `errors.Is`/`errors.As`
@@ -134,7 +146,8 @@ if err := json.Unmarshal(data, &v); err != nil {
 
 ## Interface Design
 
-**The Iron Law:** Accept interfaces, return structs. Define interfaces where they're used, not where they're implemented.
+**The Iron Law:** Accept interfaces, return structs. Define interfaces where they're used,
+not where they're implemented.
 
 ### Rules
 
@@ -229,6 +242,7 @@ func Handle(r io.Reader)
 | `Heap.Interface` | `container/heap` | `Sort.Interface` + `Push`, `Pop` | Priority queues |
 
 ### Anti-patterns
+
 - Interfaces with 5+ methods
 - Interfaces defined in implementation package
 - Returning interfaces from constructors
@@ -319,6 +333,7 @@ ch := make(chan int, workerCount) // justified by known producer/consumer ratio
 ```
 
 ### Anti-patterns
+
 - `go func()` without shutdown mechanism
 - `time.Sleep` for synchronization
 - Goroutines in init() functions
@@ -436,6 +451,7 @@ myapp/
 ```
 
 ### Anti-patterns
+
 - `Get`/`Set` prefixes on methods
 - `this`/`self` as receiver names
 - Package names: `util`, `helpers`, `common`, `misc`, `base`
@@ -565,6 +581,7 @@ func BenchmarkParse(b *testing.B) {
 ```
 
 ### Anti-patterns
+
 - Tests without `t.Run` for multiple cases
 - Missing `t.Helper()` in helper functions
 - Tests depending on execution order
@@ -646,6 +663,7 @@ STOP and reconsider when you notice:
 ## Anti-Pattern Catalog
 
 ### Error Handling Anti-Patterns
+
 ```go
 // BAD: Ignoring error
 data, _ := json.Marshal(v)
@@ -670,6 +688,7 @@ go func() {
 ```
 
 ### Concurrency Anti-Patterns
+
 ```go
 // BAD: WaitGroup by value
 func process(wg sync.WaitGroup) { // copied!
@@ -709,6 +728,7 @@ func (c Cache) Get(k string) string { // c is copied, including mutex!
 ```
 
 ### Interface Anti-Patterns
+
 ```go
 // BAD: Interface defined at implementation
 package user
@@ -731,6 +751,7 @@ type DatabaseService interface {
 ```
 
 ### Naming Anti-Patterns
+
 ```go
 // BAD: Stutter
 package user
@@ -750,6 +771,7 @@ func (self *Client) Connect() { ... }
 ```
 
 ### Testing Anti-Patterns
+
 ```go
 // BAD: No subtests
 func TestParse(t *testing.T) {
@@ -823,13 +845,13 @@ When reviewing code, actively hunt for:
 
 | Question | If Yes, Reconsider |
 |----------|-------------------|
-| Is this panic for a **programmer error** (API misuse) rather than a runtime error? | Panic may be appropriate - like nil pointer dereference |
-| Is this panic for **truly unrecoverable** system failure (entropy gone, out of memory)? | Panic may be appropriate - fail fast |
-| Is this `os.Exit` in code whose **explicit purpose** is process termination? | That's not a library killing the caller - it's doing its job |
-| Is this `init()` handling **process-level concerns** (signals, global registration)? | May be the only correct place for this logic |
-| Is this global state **effectively constant** after initialization? | Documented globals for constants are acceptable |
-| Is this `Get` prefix on a **package-level function** (not a method)? | Convention is softer here - style preference, not bug |
-| Is this reflection used for **config/serialization** where it's industry standard? | Common exception - though code generation is better |
+| Panic for **programmer error** (API misuse)? | May be appropriate - like nil deref |
+| Panic for **truly unrecoverable** failure (OOM)? | May be appropriate - fail fast |
+| `os.Exit` in code whose **purpose** is termination? | Not a library killing caller |
+| `init()` handling **process-level concerns**? | May be only correct place |
+| Global state **effectively constant** after init? | Documented globals acceptable |
+| `Get` prefix on **package-level function**? | Style preference, not bug |
+| Reflection for **config/serialization**? | Common exception |
 
 ### The Pressure Test Process
 
@@ -880,7 +902,7 @@ These are commonly flagged but often acceptable:
 
 After pressure-testing, report findings in three tiers:
 
-```
+```markdown
 ## 🔴 Real Issues (Fix These)
 [Only items that survived pressure testing as actual bugs or significant design problems]
 

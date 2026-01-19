@@ -4,7 +4,8 @@ A Claude Code skill marketplace for idiomatic Go programming.
 
 ## Overview
 
-This skill transforms Claude into a strict, idiomatic Go programmer who writes and reviews code as if Rob Pike, Dave Cheney, and the Google Go team were watching.
+This skill transforms Claude into a strict, idiomatic Go programmer who writes and reviews
+code as if Rob Pike, Dave Cheney, and the Google Go team were watching.
 
 ## Installation
 
@@ -12,13 +13,14 @@ This skill transforms Claude into a strict, idiomatic Go programmer who writes a
 
 Add the marketplace and install the plugin:
 
-```
+```sh
 /plugin marketplace add jamesainslie/go-powers
 /plugin install go-powers@go-powers
 ```
 
 Then use the skill:
-```
+
+```sh
 /skill go-powers:idiomatic-go
 ```
 
@@ -32,7 +34,8 @@ cd go-powers
 ```
 
 Then in Claude Code:
-```
+
+```sh
 /plugin marketplace add .
 /plugin install go-powers@go-powers
 ```
@@ -40,6 +43,7 @@ Then in Claude Code:
 ## What It Enforces
 
 ### Go Proverbs (All 19)
+
 - "Clear is better than clever"
 - "Errors are values"
 - "The bigger the interface, the weaker the abstraction"
@@ -47,6 +51,7 @@ Then in Claude Code:
 - And 15 more...
 
 ### Domain-Specific Rules
+
 - **Error Handling**: Always wrap with context, never ignore
 - **Interface Design**: Small interfaces, consumer-defined, accept interfaces return structs
 - **Concurrency**: Every goroutine has a known lifecycle, context propagation
@@ -54,6 +59,7 @@ Then in Claude Code:
 - **Testing**: Table-driven, subtests, t.Helper()
 
 ### Red Flags & Anti-Patterns
+
 - 30+ red flags to catch
 - Code examples of what NOT to do
 - Rationalization counters for common excuses

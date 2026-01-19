@@ -2,7 +2,10 @@
 
 ## Overview
 
-This document describes the design for a Claude Code superpower skill that enforces strict, idiomatic Go programming practices. The skill transforms Claude into a disciplined Go programmer who writes and reviews code as if Rob Pike, Dave Cheney, and the Google Go team were watching.
+This document describes the design for a Claude Code superpower skill that enforces strict,
+idiomatic Go programming practices. The skill transforms Claude into a disciplined Go
+programmer who writes and reviews code as if Rob Pike, Dave Cheney, and the Google Go team
+were watching.
 
 ## Research Sources
 
@@ -25,7 +28,7 @@ To submit to [superpowers-marketplace](https://github.com/obra/superpowers-marke
 
 # SKILL.md Content
 
-```markdown
+`````markdown
 ---
 name: idiomatic-go
 description: Use when writing or reviewing Go code - enforces Rob Pike's proverbs, Dave Cheney's Zen, and Google/Uber style patterns. Triggers before any Go implementation or during code review.
@@ -153,6 +156,7 @@ if err := json.Unmarshal(data, &v); err != nil {
 ```
 
 ### Anti-patterns
+
 - Bare `return err` without added context
 - `_ = someFunc()` ignoring returned error
 - String matching on `err.Error()` instead of `errors.Is`/`errors.As`
@@ -162,7 +166,8 @@ if err := json.Unmarshal(data, &v); err != nil {
 
 ## Interface Design
 
-**The Iron Law:** Accept interfaces, return structs. Define interfaces where they're used, not where they're implemented.
+**The Iron Law:** Accept interfaces, return structs. Define interfaces where they're used,
+not where they're implemented.
 
 ### Rules
 
@@ -257,6 +262,7 @@ func Handle(r io.Reader)
 | `Heap.Interface` | `container/heap` | `Sort.Interface` + `Push`, `Pop` | Priority queues |
 
 ### Anti-patterns
+
 - Interfaces with 5+ methods
 - Interfaces defined in implementation package
 - Returning interfaces from constructors
@@ -347,6 +353,7 @@ ch := make(chan int, workerCount) // justified by known producer/consumer ratio
 ```
 
 ### Anti-patterns
+
 - `go func()` without shutdown mechanism
 - `time.Sleep` for synchronization
 - Goroutines in init() functions
@@ -464,6 +471,7 @@ myapp/
 ```
 
 ### Anti-patterns
+
 - `Get`/`Set` prefixes on methods
 - `this`/`self` as receiver names
 - Package names: `util`, `helpers`, `common`, `misc`, `base`
@@ -593,6 +601,7 @@ func BenchmarkParse(b *testing.B) {
 ```
 
 ### Anti-patterns
+
 - Tests without `t.Run` for multiple cases
 - Missing `t.Helper()` in helper functions
 - Tests depending on execution order
@@ -674,6 +683,7 @@ STOP and reconsider when you notice:
 ## Anti-Pattern Catalog
 
 ### Error Handling Anti-Patterns
+
 ```go
 // BAD: Ignoring error
 data, _ := json.Marshal(v)
@@ -698,6 +708,7 @@ go func() {
 ```
 
 ### Concurrency Anti-Patterns
+
 ```go
 // BAD: WaitGroup by value
 func process(wg sync.WaitGroup) { // copied!
@@ -737,6 +748,7 @@ func (c Cache) Get(k string) string { // c is copied, including mutex!
 ```
 
 ### Interface Anti-Patterns
+
 ```go
 // BAD: Interface defined at implementation
 package user
@@ -759,6 +771,7 @@ type DatabaseService interface {
 ```
 
 ### Naming Anti-Patterns
+
 ```go
 // BAD: Stutter
 package user
@@ -778,6 +791,7 @@ func (self *Client) Connect() { ... }
 ```
 
 ### Testing Anti-Patterns
+
 ```go
 // BAD: No subtests
 func TestParse(t *testing.T) {
@@ -840,7 +854,7 @@ When reviewing code, actively hunt for:
 6. Stuttering in names
 7. Tests without subtests for multiple cases
 8. `init()` functions doing too much
-```
+`````
 
 ---
 
@@ -848,7 +862,7 @@ When reviewing code, actively hunt for:
 
 ### File Structure for Marketplace Submission
 
-```
+```text
 idiomatic-go/
 ├── SKILL.md           # Main skill content (above)
 └── README.md          # Optional: additional examples or FAQ
@@ -856,7 +870,8 @@ idiomatic-go/
 
 ### Token Efficiency
 
-The skill is comprehensive (~600 lines) but organized with clear headers for quick scanning. Consider splitting into supporting files if specific sections grow significantly.
+The skill is comprehensive (~600 lines) but organized with clear headers for quick scanning.
+Consider splitting into supporting files if specific sections grow significantly.
 
 ### Integration with Other Skills
 
