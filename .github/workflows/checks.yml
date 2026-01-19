@@ -1,0 +1,44 @@
+name: checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download gomdlint
+        run: |
+          curl -sL "https://github.com/jamesainslie/gomdlint/releases/download/v0.1.2/mdlint_0.1.2_Linux_x86_64.tar.gz" -o /tmp/gomdlint.tar.gz
+          tar xzf /tmp/gomdlint.tar.gz -C /tmp
+          chmod +x /tmp/gomdlint
+          sudo mv /tmp/gomdlint /usr/local/bin/
+
+      - name: Lint markdown
+        run: gomdlint lint .
+
+      - name: Verify no uncommitted changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          git update-index -q --refresh
+          if [ -n "$(git status --porcelain --ignore-submodules)" ]; then
+            echo "::error::Working tree is dirty (modified or untracked files)"
+            git status --porcelain=v1 --ignore-submodules
+            git --no-pager diff
+            exit 1
+          fi

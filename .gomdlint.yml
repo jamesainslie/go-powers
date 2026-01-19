@@ -1,0 +1,77 @@
+# gomdlint configuration for go-powers skill
+# See: https://github.com/jamesainslie/gomdlint
+#
+# This is a documentation-heavy skill repo with many code examples.
+# We disable rules that create noise in this context.
+
+flavor: gfm
+severity_default: warning
+
+backups:
+  enabled: false
+
+ignore:
+  - "vendor/**"
+  - "node_modules/**"
+  - ".git/**"
+
+rules:
+  # === DISABLED: Not applicable to skill documentation ===
+
+  # Line length - code examples naturally exceed limits
+  MD013:
+    enabled: false
+
+  # Duplicate headings - skill files reuse "Rules", "Anti-patterns", etc.
+  MD024:
+    enabled: false
+
+  # Single H1 - design docs may have multiple sections
+  MD025:
+    enabled: false
+
+  # Fenced code language - some blocks are plain text/commands
+  MD040:
+    enabled: false
+
+  # Blanks around fences - overly strict for code-heavy docs
+  MD031:
+    enabled: false
+
+  # Blanks around lists - overly strict for code-heavy docs
+  MD032:
+    enabled: false
+
+  # Heading blank lines - many headings followed by lists/code
+  MD022:
+    enabled: false
+
+  # === ENABLED: Useful checks ===
+
+  # Multiple consecutive blank lines
+  MD012:
+    enabled: true
+    severity: warning
+
+  # Heading increment - disabled, design docs have varied structure
+  MD001:
+    enabled: false
+
+  # Trailing punctuation - disabled, false positives on YAML frontmatter
+  MD026:
+    enabled: false
+
+  # Trailing spaces
+  MD009:
+    enabled: true
+    severity: warning
+
+  # Hard tabs
+  MD010:
+    enabled: true
+    severity: warning
+
+  # Single trailing newline
+  MD047:
+    enabled: true
+    severity: warning
