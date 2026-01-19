@@ -1,0 +1,13 @@
+{
+  "name": "go-powers",
+  "description": "Idiomatic Go programming skills for Claude Code: enforces Rob Pike's proverbs, Dave Cheney's Zen, and Google/Uber style patterns",
+  "version": "0.1.0",
+  "author": {
+    "name": "James Ainslie",
+    "email": "james@ainslie.dev"
+  },
+  "homepage": "https://github.com/jamesainslie/go-powers",
+  "repository": "https://github.com/jamesainslie/go-powers",
+  "license": "MIT",
+  "keywords": ["go", "golang", "idiomatic", "style", "proverbs", "best-practices"]
+}
